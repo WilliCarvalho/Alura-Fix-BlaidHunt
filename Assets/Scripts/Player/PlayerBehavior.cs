@@ -2,17 +2,29 @@ using UnityEngine;
 
 public class PlayerBehavior : MonoBehaviour
 {
-    private InputManager inputManager;
     [SerializeField] private float moveSpeed = 5;
+    [SerializeField] private float jumpForce = 3;
+    
+    private Rigidbody2D rigidbody;
 
-    void Start()
+    private void Awake()
     {
-        inputManager = new InputManager();
+        rigidbody = GetComponent<Rigidbody2D>();
+    }
+
+    private void Start()
+    {
+        GameManager.Instance.InputManager.OnJump += HandleJump;
     }
 
     private void Update()
     {
-        float moveDirection = inputManager.Movement * Time.deltaTime * moveSpeed;
-        transform.Translate(moveDirection, 0, 0);
+        float moveDirection = GameManager.Instance.InputManager.Movement;
+        transform.Translate(moveDirection * Time.deltaTime * moveSpeed, 0, 0);
+    }
+
+    private void HandleJump()
+    {
+        rigidbody.velocity += Vector2.up * jumpForce;
     }
 }
