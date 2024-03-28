@@ -10,7 +10,7 @@ public class IsGroundedChecker : MonoBehaviour
         return Physics2D.OverlapBox(checkerPosition.position, checkerSize, 0f, groundLayer);
     }
 
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
         if (checkerPosition == null) return;
         if (IsGrounded())

@@ -12,7 +12,7 @@ public class PlayerBehavior : MonoBehaviour
     private IsGroundedChecker isGroundedCheker;
 
     private void Awake()
-    {
+    {        
         rigidbody = GetComponent<Rigidbody2D>();
         isGroundedCheker = GetComponent<IsGroundedChecker>();
     }
