@@ -12,7 +12,7 @@ public class InputManager
     public InputManager()
     {
         playerControls = new PlayerControls();
-        playerControls.Gameplay.Enable();
+        EnablePlayerInput();
 
         playerControls.Gameplay.Jump.performed += OnJumpPerformed;
     }
@@ -21,4 +21,8 @@ public class InputManager
     {
         OnJump?.Invoke();
     }
+
+    public void DisablePlayerInput() => playerControls.Gameplay.Disable();
+
+    public void EnablePlayerInput() => playerControls.Gameplay.Enable();
 }
