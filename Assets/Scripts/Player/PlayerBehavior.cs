@@ -1,12 +1,17 @@
+using System;
 using UnityEngine;
 
 public class PlayerBehavior : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 5;
     [SerializeField] private float jumpForce = 3;
+    
+    [Header("Propriedades de ataque")]
+    [SerializeField] private float attackRange = 1f;
+    [SerializeField] private Transform attackPosition;
+    [SerializeField] private LayerMask attackLayer;
 
     private float moveDirection;
-
 
     private Rigidbody2D rigidbody;
     private IsGroundedChecker isGroundedCheker;
@@ -58,5 +63,29 @@ public class PlayerBehavior : MonoBehaviour
         GetComponent<Collider2D>().enabled = false;
         rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
         GameManager.Instance.InputManager.DisablePlayerInput();
+    }
+
+    private void Attack()
+    {
+        Collider2D[] hittedEnemies = 
+            Physics2D.OverlapCircleAll(attackPosition.position, attackRange, attackLayer);
+        print("Making enemy take damage");
+        print(hittedEnemies.Length);
+        
+        foreach (Collider2D hittedEnemy in hittedEnemies)
+        {
+            print("Cheking enemy");
+            if (hittedEnemy.TryGetComponent(out Health enemyHealth))
+            {
+                print("Getting damage");
+                enemyHealth.TakeDamage();
+            }
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(attackPosition.position, attackRange);
     }
 }

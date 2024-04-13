@@ -12,6 +12,7 @@ public class PlayerAnim : MonoBehaviour
         groundedChecker = GetComponent<IsGroundedChecker>();
         playerHealth = GetComponent<Health>();
 
+        GameManager.Instance.InputManager.OnAttack += PlayAttackAnim;
         playerHealth.OnHurt += PlayHurtAnim;
         playerHealth.OnDead += PlayDeadAnim;
     }
@@ -21,6 +22,11 @@ public class PlayerAnim : MonoBehaviour
         bool isMoving = GameManager.Instance.InputManager.Movement != 0;
         animator.SetBool("isMoving", isMoving);
         animator.SetBool("isJumping", !groundedChecker.IsGrounded());
+    }
+
+    private void PlayAttackAnim()
+    {
+        animator.SetTrigger("attack");
     }
 
     private void PlayHurtAnim()
