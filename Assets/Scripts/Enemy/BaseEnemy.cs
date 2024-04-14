@@ -12,14 +12,17 @@ public abstract class BaseEnemy : MonoBehaviour
         animator = GetComponent<Animator>();
         health = GetComponent<Health>();
 
+        health.OnHurt += PlayHurtAnim;
         health.OnDead += HandleDeath;
     }
 
     protected abstract void Update();
+
+    private void PlayHurtAnim() => animator.SetTrigger("hurt");
     
     private void HandleDeath()
     {
-        //TODO: tocar animação de morte
+        animator.SetTrigger("dead");
         StartCoroutine(DestroyEnemy(2));
     }
 
