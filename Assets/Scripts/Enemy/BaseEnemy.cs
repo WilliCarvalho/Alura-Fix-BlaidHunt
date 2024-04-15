@@ -1,15 +1,17 @@
 using System.Collections;
 using UnityEngine;
 
-[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(Animator), typeof(AudioSource))]
 public abstract class BaseEnemy : MonoBehaviour
 {
     protected Animator animator;
+    protected AudioSource audioSource;
     protected Health health;
 
     protected virtual void Awake()
     {
         animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
         health = GetComponent<Health>();
 
         health.OnHurt += PlayHurtAnim;
