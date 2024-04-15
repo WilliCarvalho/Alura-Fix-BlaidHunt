@@ -14,13 +14,16 @@ public class PlayerBehavior : MonoBehaviour
     private float moveDirection;
 
     private Rigidbody2D rigidbody;
+    private Health health;
     private IsGroundedChecker isGroundedCheker;
 
     private void Awake()
     {        
         rigidbody = GetComponent<Rigidbody2D>();
         isGroundedCheker = GetComponent<IsGroundedChecker>();
-        GetComponent<Health>().OnDead += HandlePlayerDeath;
+        health = GetComponent<Health>();
+        health.OnHurt += PlayHurtAudio;
+        health.OnDead += HandlePlayerDeath;
     }
 
     private void Start()
@@ -56,12 +59,19 @@ public class PlayerBehavior : MonoBehaviour
     {
         if (isGroundedCheker.IsGrounded() == false) return;
         rigidbody.velocity += Vector2.up * jumpForce;
+        GameManager.Instance.AudioManager.PlaySFX(SFX.PlayerJump);
+    }
+
+    private void PlayHurtAudio()
+    {
+        GameManager.Instance.AudioManager.PlaySFX(SFX.PlayerHurt);
     }
 
     private void HandlePlayerDeath()
     {
         GetComponent<Collider2D>().enabled = false;
         rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
+        GameManager.Instance.AudioManager.PlaySFX(SFX.PlayerDeath);
         GameManager.Instance.InputManager.DisablePlayerInput();
     }
 
@@ -69,18 +79,21 @@ public class PlayerBehavior : MonoBehaviour
     {
         Collider2D[] hittedEnemies = 
             Physics2D.OverlapCircleAll(attackPosition.position, attackRange, attackLayer);
-        print("Making enemy take damage");
-        print(hittedEnemies.Length);
+        
+        GameManager.Instance.AudioManager.PlaySFX(SFX.PlayerAttack);
         
         foreach (Collider2D hittedEnemy in hittedEnemies)
         {
-            print("Cheking enemy");
             if (hittedEnemy.TryGetComponent(out Health enemyHealth))
             {
-                print("Getting damage");
                 enemyHealth.TakeDamage();
             }
         }
+    }
+
+    private void PlayWalkSound()
+    {
+        GameManager.Instance.AudioManager.PlaySFX(SFX.PlayerWalk);
     }
 
     private void OnDrawGizmos()
