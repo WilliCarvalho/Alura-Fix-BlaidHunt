@@ -28,7 +28,7 @@ public class MeleeEnemy : BaseEnemy
 
     private void VerifyCanAttack()
     {
-        if (cooldownTimer < attackCooldown) return;
+        if (cooldownTimer < attackCooldown || canAttack == false) return;
         if (PlayerInSight())
         {
             animator.SetTrigger("attack");

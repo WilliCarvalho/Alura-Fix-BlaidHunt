@@ -8,6 +8,8 @@ public abstract class BaseEnemy : MonoBehaviour
     protected AudioSource audioSource;
     protected Health health;
 
+    protected bool canAttack = true;
+
     protected virtual void Awake()
     {
         animator = GetComponent<Animator>();
@@ -24,6 +26,8 @@ public abstract class BaseEnemy : MonoBehaviour
     
     private void HandleDeath()
     {
+        canAttack = false;
+        GetComponent<BoxCollider2D>().enabled = false;
         animator.SetTrigger("dead");
         StartCoroutine(DestroyEnemy(2));
     }
