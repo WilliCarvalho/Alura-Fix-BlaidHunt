@@ -8,7 +8,15 @@ public class MeleeEnemy : BaseEnemy
 
     protected override void Update()
     {
-        print("is in sight? " + PlayerInSight());
+        VerifyCanAttack();
+    }
+    
+    private void VerifyCanAttack()
+    {
+        if (PlayerInSight())
+        {
+            animator.SetTrigger("attack");
+        }
     }
 
     private bool PlayerInSight()
